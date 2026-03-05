@@ -539,10 +539,12 @@
             font-size: 15px;
             line-height: 1.85;
             color: var(--text-secondary);
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .modal-body p {
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .modal-body p:last-child {
@@ -557,21 +559,79 @@
 
         .modal-body ol,
         .modal-body ul {
-            padding-left: 24px;
-            margin-bottom: 14px;
+            padding-left: 28px;
+            margin-bottom: 16px;
         }
 
         .modal-body li {
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            line-height: 1.7;
         }
 
         .modal-body a {
             color: var(--accent-light);
             text-decoration: none;
+            border-bottom: 1px dashed rgba(180, 168, 255, 0.3);
+            transition: all 0.2s;
+            word-break: break-all;
         }
 
         .modal-body a:hover {
-            text-decoration: underline;
+            color: #d4cdff;
+            border-bottom-color: var(--accent-light);
+        }
+
+        .modal-body br+br {
+            display: none;
+        }
+
+        .modal-body img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .modal-body h1,
+        .modal-body h2,
+        .modal-body h3 {
+            color: var(--text);
+            margin: 20px 0 10px;
+            font-weight: 600;
+        }
+
+        .modal-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+        }
+
+        .modal-body th,
+        .modal-body td {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+
+        .modal-body th {
+            background: var(--bg-card);
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .modal-body blockquote {
+            border-left: 3px solid var(--accent);
+            padding: 8px 16px;
+            margin: 14px 0;
+            color: var(--text-secondary);
+            background: var(--accent-glow);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .modal-body code {
+            background: var(--bg-card);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
         }
 
         .modal-footer {
@@ -785,7 +845,7 @@
             if (q) {
                 filtered = filtered.filter(c =>
                     (c.title || '').toLowerCase().includes(q) ||
-                    (c.content || '').toLowerCase().includes(q)
+                    (c.text || c.content || '').toLowerCase().includes(q)
                 );
             }
 
@@ -810,7 +870,7 @@
             grid.innerHTML = toShow.map((c, i) => {
                 const cat = c.category || 'General';
                 const css = CAT_CSS[cat] || 'cat-general';
-                const preview = esc((c.content || '').substring(0, 160));
+                const preview = esc((c.text || c.content || '').substring(0, 160));
                 return `<div class="card" onclick="openCard(${i})" style="animation-delay:${Math.min(i * 30, 300)}ms">
             <span class="card-category ${css}">${CAT_EMOJI[cat] || '📁'} ${cat}</span>
             <div class="card-title">${esc(c.title)}</div>
@@ -832,14 +892,21 @@
             document.getElementById('mCat').textContent = `${CAT_EMOJI[cat] || ''} ${cat}`;
             document.getElementById('mTitle').textContent = c.title || 'Untitled';
 
-            // Format content with proper paragraphs
-            const raw = c.content || 'No content';
-            const formatted = raw
-                .split(/\n{2,}|(?<=\.)\s{2,}/)
-                .filter(p => p.trim())
-                .map(p => `<p>${esc(p.trim())}</p>`)
-                .join('');
-            document.getElementById('mBody').innerHTML = formatted || `<p>${esc(raw)}</p>`;
+            // Render HTML content with link detection
+            let html = c.html || c.content || 'No content';
+            // If it's plain text (no HTML tags), convert URLs to links and add paragraphs
+            if (!/<[a-z][\s\S]*>/i.test(html)) {
+                html = esc(html)
+                    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
+                    .split(/\n{2,}/)
+                    .filter(p => p.trim())
+                    .map(p => `<p>${p.trim()}</p>`)
+                    .join('');
+            } else {
+                // For HTML content, also make bare URLs clickable
+                html = html.replace(/(?<!href=")(https?:\/\/[^\s<"]+)(?![^<]*<\/a>)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+            }
+            document.getElementById('mBody').innerHTML = html;
 
             let foot = '';
             if (c.slack_permalink) foot += `<a href="${c.slack_permalink}" target="_blank">View Slack Thread →</a>`;
