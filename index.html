@@ -750,6 +750,205 @@
                 transform: translateY(0);
             }
         }
+
+        /* ── CONVERSATION HELPER ───────────────────────── */
+        .helper-btn {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 6px 24px rgba(124, 108, 240, 0.4);
+            z-index: 100;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .helper-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 32px rgba(124, 108, 240, 0.5);
+        }
+
+        .helper-btn.active {
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+        }
+
+        .helper-panel {
+            display: none;
+            position: fixed;
+            bottom: 96px;
+            right: 28px;
+            width: 420px;
+            max-height: 70vh;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            overflow: hidden;
+            animation: appear 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .helper-panel.open {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .helper-head {
+            padding: 20px 20px 0;
+        }
+
+        .helper-head h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .helper-head p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .helper-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            resize: none;
+            min-height: 60px;
+            transition: border 0.2s;
+        }
+
+        .helper-input:focus {
+            border-color: var(--accent);
+        }
+
+        .helper-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .helper-results {
+            padding: 12px 20px 20px;
+            overflow-y: auto;
+            flex: 1;
+            max-height: 50vh;
+        }
+
+        .helper-results-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .helper-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            margin-bottom: 8px;
+            transition: all 0.2s;
+        }
+
+        .helper-card:hover {
+            border-color: var(--accent);
+        }
+
+        .helper-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .helper-card-cat {
+            font-size: 11px;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .helper-card-preview {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .helper-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .helper-link {
+            font-size: 12px;
+            color: var(--accent-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 4px 10px;
+            background: var(--accent-glow);
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .helper-link:hover {
+            background: var(--accent-glow-strong);
+        }
+
+        .helper-copy {
+            font-size: 12px;
+            color: var(--text-secondary);
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .helper-copy:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .helper-empty {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .helper-panel {
+                width: calc(100% - 40px);
+                right: 20px;
+                bottom: 88px;
+            }
+        }
     </style>
 </head>
 
@@ -963,6 +1162,119 @@
         });
 
         init();
+    </script>
+    <!-- Conversation Helper -->
+    <button class="helper-btn" id="helperBtn" onclick="toggleHelper()" title="Conversation Helper">💬</button>
+    <div class="helper-panel" id="helperPanel">
+        <div class="helper-head">
+            <h3>💬 Conversation Helper</h3>
+            <p>Paste a customer question to find matching Guru cards</p>
+            <textarea class="helper-input" id="helperInput"
+                placeholder="e.g. How does intent classification work?"></textarea>
+        </div>
+        <div class="helper-results" id="helperResults">
+            <div class="helper-empty">Type a question above to find matching Guru cards</div>
+        </div>
+    </div>
+
+    <script>
+        /* ── Conversation Helper ─────────────────── */
+        const STOP_WORDS = new Set(['the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
+            'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'shall', 'should', 'may', 'might',
+            'can', 'could', 'i', 'me', 'my', 'we', 'our', 'you', 'your', 'he', 'she', 'it', 'they', 'them',
+            'this', 'that', 'these', 'those', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'from',
+            'and', 'or', 'but', 'not', 'no', 'so', 'if', 'then', 'than', 'what', 'how', 'why', 'when', 'where',
+            'which', 'who', 'whom', 'its', 'is', 'am', 'about', 'into', 'through', 'during', 'before', 'after']);
+
+        function tokenize(text) {
+            return (text || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(w => w.length > 1 && !STOP_WORDS.has(w));
+        }
+
+        function matchCards(query) {
+            const qTokens = tokenize(query);
+            if (!qTokens.length) return [];
+
+            const scored = [];
+            for (const card of allCards) {
+                const cardTokens = tokenize(card.title + ' ' + (card.text || ''));
+                let score = 0;
+                for (const qt of qTokens) {
+                    // Exact word match
+                    for (const ct of cardTokens) {
+                        if (ct === qt) score += 3;
+                        else if (ct.includes(qt) || qt.includes(ct)) score += 1;
+                    }
+                    // Title bonus
+                    if ((card.title || '').toLowerCase().includes(qt)) score += 5;
+                }
+                if (score > 0) scored.push({ score, card });
+            }
+
+            scored.sort((a, b) => b.score - a.score);
+            return scored.slice(0, 5);
+        }
+
+        function toggleHelper() {
+            const panel = document.getElementById('helperPanel');
+            const btn = document.getElementById('helperBtn');
+            panel.classList.toggle('open');
+            btn.classList.toggle('active');
+            if (panel.classList.contains('open')) {
+                document.getElementById('helperInput').focus();
+            }
+        }
+
+        function renderHelperResults(results) {
+            const el = document.getElementById('helperResults');
+            if (!results.length) {
+                el.innerHTML = '<div class="helper-empty">No matching Guru cards found. Try different keywords.</div>';
+                return;
+            }
+            el.innerHTML = `<div class="helper-results-label">Top ${results.length} matches</div>` +
+                results.map(r => {
+                    const c = r.card;
+                    const cat = c.category || 'General';
+                    const css = CAT_CSS[cat] || 'cat-general';
+                    const guruUrl = c.url || '#';
+                    const preview = esc((c.text || '').substring(0, 100));
+                    return `<div class="helper-card">
+                        <span class="helper-card-cat ${css}">${CAT_EMOJI[cat] || ''} ${cat}</span>
+                        <div class="helper-card-title">${esc(c.title)}</div>
+                        <div class="helper-card-preview">${preview}...</div>
+                        <div class="helper-card-actions">
+                            <a href="${guruUrl}" target="_blank" class="helper-link">Open in Guru →</a>
+                            <button class="helper-copy" onclick="copyGuruLink('${esc(c.title)}', '${guruUrl}')">📋 Copy for Intercom</button>
+                        </div>
+                    </div>`;
+                }).join('');
+        }
+
+        function copyGuruLink(title, url) {
+            const text = `📚 Related Guru Card: ${title}\n${url}`;
+            navigator.clipboard.writeText(text).then(() => {
+                event.target.textContent = '✅ Copied!';
+                setTimeout(() => { event.target.textContent = '📋 Copy for Intercom'; }, 2000);
+            });
+        }
+
+        let helperTimer;
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('helperInput');
+            if (input) {
+                input.addEventListener('input', () => {
+                    clearTimeout(helperTimer);
+                    helperTimer = setTimeout(() => {
+                        const q = input.value.trim();
+                        if (q.length < 3) {
+                            document.getElementById('helperResults').innerHTML = '<div class="helper-empty">Type a question above to find matching Guru cards</div>';
+                            return;
+                        }
+                        const results = matchCards(q);
+                        renderHelperResults(results);
+                    }, 200);
+                });
+            }
+        });
     </script>
 </body>
 
