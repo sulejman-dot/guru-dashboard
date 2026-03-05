@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEOmonitor Knowledge Base</title>
+    <meta name="description" content="SEOmonitor Customer Success Knowledge Base — Browse and search Guru cards">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f1117;
+            --bg-card: #1a1d27;
+            --bg-card-hover: #22263a;
+            --bg-input: #1e2130;
+            --border: #2a2e3f;
+            --text: #e4e6ef;
+            --text-dim: #8b8fa3;
+            --text-muted: #5c6078;
+            --accent: #6c5ce7;
+            --accent-light: #a29bfe;
+            --accent-glow: rgba(108, 92, 231, 0.15);
+            --green: #00b894;
+            --green-dim: rgba(0, 184, 148, 0.15);
+            --orange: #f39c12;
+            --orange-dim: rgba(243, 156, 18, 0.15);
+            --red: #e74c3c;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* ── Header ─────────────────────────────────────────── */
+        .header {
+            background: linear-gradient(135deg, #1a1d27 0%, #0f1117 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .logo-text span {
+            color: var(--accent-light);
+        }
+
+        /* ── Search ─────────────────────────────────────────── */
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 16px 10px 42px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .search-count {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        /* ── Stats ──────────────────────────────────────────── */
+        .stats-bar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 24px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            flex: 1;
+            min-width: 160px;
+            transition: transform 0.2s;
+        }
+
+        .stat:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-light), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* ── Tabs ───────────────────────────────────────────── */
+        .tabs {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            gap: 4px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab {
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            background: none;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .tab:hover {
+            color: var(--text);
+        }
+
+        .tab.active {
+            color: var(--accent-light);
+            border-bottom-color: var(--accent);
+        }
+
+        .tab .badge {
+            display: inline-block;
+            background: var(--accent-glow);
+            color: var(--accent-light);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-left: 6px;
+        }
+
+        .tab .badge.pending {
+            background: var(--orange-dim);
+            color: var(--orange);
+        }
+
+        /* ── Card Grid ──────────────────────────────────────── */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 24px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-preview {
+            font-size: 13px;
+            color: var(--text-dim);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .card-badge.verified {
+            background: var(--green-dim);
+            color: var(--green);
+        }
+
+        .card-badge.pending {
+            background: var(--orange-dim);
+            color: var(--orange);
+        }
+
+        /* ── Modal ──────────────────────────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 200;
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 720px;
+            padding: 32px;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--bg-input);
+            color: var(--text-dim);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            padding-right: 40px;
+        }
+
+        .modal-content {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-dim);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .modal-meta {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .modal-meta a {
+            color: var(--accent-light);
+            text-decoration: none;
+        }
+
+        .modal-meta a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Empty State ────────────────────────────────────── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-text {
+            font-size: 16px;
+        }
+
+        /* ── Load More ──────────────────────────────────────── */
+        .load-more {
+            text-align: center;
+            padding: 24px;
+        }
+
+        .load-more button {
+            padding: 10px 32px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-size: 14px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .load-more button:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* ── Responsive ─────────────────────────────────────── */
+        @media (max-width: 768px) {
+            .header-inner {
+                flex-wrap: wrap;
+            }
+
+            .search-container {
+                max-width: 100%;
+                order: 3;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                gap: 8px;
+            }
+
+            .stat {
+                min-width: 100px;
+                padding: 12px 16px;
+            }
+
+            .stat-value {
+                font-size: 22px;
+            }
+        }
+
+        /* ── Highlight ──────────────────────────────────────── */
+        mark {
+            background: var(--accent-glow);
+            color: var(--accent-light);
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <div class="logo-icon">G</div>
+                <div class="logo-text">SEOmonitor <span>Knowledge Base</span></div>
+            </div>
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search cards..."
+                    autocomplete="off">
+                <span class="search-count" id="searchCount"></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="stats-bar" id="statsBar">
+        <div class="stat">
+            <div class="stat-value" id="statTotal">—</div>
+            <div class="stat-label">Total Cards</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="statVerified">—</div>
+            <div class="stat-label">Verified</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value" id="statPending">—</div>
+            <div class="stat-label">Pending</div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="all" id="tabAll">All Cards <span class="badge"
+                id="badgeAll"></span></button>
+        <button class="tab" data-tab="pending" id="tabPending">Pending <span class="badge pending"
+                id="badgePending"></span></button>
+    </div>
+
+    <div class="content">
+        <div class="card-grid" id="cardGrid"></div>
+        <div class="load-more" id="loadMore" style="display:none;">
+            <button onclick="loadMoreCards()">Load more cards</button>
+        </div>
+        <div class="empty-state" id="emptyState" style="display:none;">
+            <div class="empty-state-icon">🔍</div>
+            <div class="empty-state-text">No cards found matching your search</div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal-close" id="modalClose">✕</button>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-content" id="modalContent"></div>
+            <div class="modal-meta" id="modalMeta"></div>
+        </div>
+    </div>
+
+    <script>
+        let allCards = [];
+        let pendingCards = [];
+        let filteredCards = [];
+        let currentTab = 'all';
+        let displayCount = 30;
+
+        async function init() {
+            const res = await fetch('data.json');
+            const data = await res.json();
+            allCards = data.guru_cards || [];
+            pendingCards = data.pending_cards || [];
+
+            // Stats
+            document.getElementById('statTotal').textContent = allCards.length;
+            document.getElementById('statPending').textContent = pendingCards.length;
+
+            // Count "verified" — we don't have that in simple schema, show total
+            document.getElementById('statVerified').textContent = allCards.length;
+
+            document.getElementById('badgeAll').textContent = allCards.length;
+            document.getElementById('badgePending').textContent = pendingCards.length;
+
+            filteredCards = [...allCards];
+            renderCards();
+        }
+
+        function renderCards() {
+            const grid = document.getElementById('cardGrid');
+            const source = currentTab === 'pending' ? pendingCards : filteredCards;
+            const toShow = source.slice(0, displayCount);
+
+            if (source.length === 0) {
+                grid.innerHTML = '';
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('loadMore').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('emptyState').style.display = 'none';
+
+            grid.innerHTML = toShow.map((card, i) => {
+                const title = escapeHtml(card.title || 'Untitled');
+                const preview = escapeHtml((card.content || card.question || '').substring(0, 150));
+                const isPending = currentTab === 'pending';
+                const badgeHtml = isPending
+                    ? '<span class="card-badge pending">Pending</span>'
+                    : '';
+
+                return `<div class="card" onclick="openCard(${i}, '${currentTab}')">
+            ${badgeHtml}
+            <div class="card-title">${title}</div>
+            <div class="card-preview">${preview}...</div>
+        </div>`;
+            }).join('');
+
+            document.getElementById('loadMore').style.display =
+                source.length > displayCount ? 'block' : 'none';
+
+            document.getElementById('searchCount').textContent =
+                document.getElementById('searchInput').value
+                    ? `${source.length} result${source.length !== 1 ? 's' : ''}`
+                    : '';
+        }
+
+        function loadMoreCards() {
+            displayCount += 30;
+            renderCards();
+        }
+
+        function openCard(index, tab) {
+            const source = tab === 'pending' ? pendingCards : filteredCards;
+            const card = source[index];
+            if (!card) return;
+
+            document.getElementById('modalTitle').textContent = card.title || 'Untitled';
+            document.getElementById('modalContent').textContent = card.content || card.answer || card.question || 'No content';
+
+            let meta = '';
+            if (card.slack_permalink) {
+                meta += `<a href="${card.slack_permalink}" target="_blank">View Slack Thread →</a>`;
+            }
+            if (card.created_at) {
+                meta += `<br>Created: ${new Date(card.created_at).toLocaleDateString()}`;
+            }
+            document.getElementById('modalMeta').innerHTML = meta;
+
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Search
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const query = e.target.value.toLowerCase().trim();
+                displayCount = 30;
+
+                if (!query) {
+                    filteredCards = [...allCards];
+                } else {
+                    filteredCards = allCards.filter(card =>
+                        (card.title || '').toLowerCase().includes(query) ||
+                        (card.content || '').toLowerCase().includes(query)
+                    );
+                }
+
+                if (currentTab === 'pending') {
+                    // Also filter pending
+                }
+
+                renderCards();
+            }, 200);
+        });
+
+        // Tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentTab = tab.dataset.tab;
+                displayCount = 30;
+                renderCards();
+            });
+        });
+
+        // Modal close
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Keyboard shortcut: focus search
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement !== document.getElementById('searchInput')) {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+
+        init();
+    </script>
+
+</body>
+
+</html>
