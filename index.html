@@ -537,10 +537,41 @@
         .modal-body {
             padding: 24px 32px 32px;
             font-size: 15px;
-            line-height: 1.8;
+            line-height: 1.85;
             color: var(--text-secondary);
-            white-space: pre-wrap;
-            word-break: break-word;
+        }
+
+        .modal-body p {
+            margin-bottom: 14px;
+        }
+
+        .modal-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .modal-body strong,
+        .modal-body b {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .modal-body ol,
+        .modal-body ul {
+            padding-left: 24px;
+            margin-bottom: 14px;
+        }
+
+        .modal-body li {
+            margin-bottom: 6px;
+        }
+
+        .modal-body a {
+            color: var(--accent-light);
+            text-decoration: none;
+        }
+
+        .modal-body a:hover {
+            text-decoration: underline;
         }
 
         .modal-footer {
@@ -780,7 +811,7 @@
                 const cat = c.category || 'General';
                 const css = CAT_CSS[cat] || 'cat-general';
                 const preview = esc((c.content || '').substring(0, 160));
-                return `<div class="card" onclick="open(${i})" style="animation-delay:${Math.min(i * 30, 300)}ms">
+                return `<div class="card" onclick="openCard(${i})" style="animation-delay:${Math.min(i * 30, 300)}ms">
             <span class="card-category ${css}">${CAT_EMOJI[cat] || '📁'} ${cat}</span>
             <div class="card-title">${esc(c.title)}</div>
             <div class="card-preview">${preview}...</div>
@@ -792,7 +823,7 @@
 
         function showMore() { perPage += 30; render(); }
 
-        window.open = function (i) {
+        function openCard(i) {
             const c = filtered[i];
             if (!c) return;
             const cat = c.category || 'General';
@@ -800,13 +831,22 @@
             document.getElementById('mCat').className = `modal-cat ${css}`;
             document.getElementById('mCat').textContent = `${CAT_EMOJI[cat] || ''} ${cat}`;
             document.getElementById('mTitle').textContent = c.title || 'Untitled';
-            document.getElementById('mBody').textContent = c.content || 'No content';
+
+            // Format content with proper paragraphs
+            const raw = c.content || 'No content';
+            const formatted = raw
+                .split(/\n{2,}|(?<=\.)\s{2,}/)
+                .filter(p => p.trim())
+                .map(p => `<p>${esc(p.trim())}</p>`)
+                .join('');
+            document.getElementById('mBody').innerHTML = formatted || `<p>${esc(raw)}</p>`;
+
             let foot = '';
             if (c.slack_permalink) foot += `<a href="${c.slack_permalink}" target="_blank">View Slack Thread →</a>`;
             document.getElementById('mFoot').innerHTML = foot;
             document.getElementById('overlay').classList.add('open');
             document.body.style.overflow = 'hidden';
-        };
+        }
 
         function closeModal() {
             document.getElementById('overlay').classList.remove('open');
